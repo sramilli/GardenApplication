@@ -14,8 +14,12 @@ public class GardenApplication {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public static void main(String[] args) throws InterruptedException {
+        
+        Garden garden = new Garden();
+        new Thread(garden).start();
+        
+        Thread.sleep(5 * 60 * 1000);
     }
     
 }
