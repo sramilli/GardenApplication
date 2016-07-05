@@ -19,7 +19,9 @@ public class GardenApplication {
         Garden garden = new Garden();
         new Thread(garden).start();
         
-        Thread.sleep(5 * 60 * 1000);
+        Thread.sleep(1 * 60 * 1000);
+        
+        garden.stop();
     }
     
 }

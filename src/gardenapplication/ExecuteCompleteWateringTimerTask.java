@@ -26,7 +26,7 @@ class ExecuteCompleteWateringTimerTask extends TimerTask {
     @Override
     public void run() {
         for (Pump tPump: iPumps){
-            iActuator.activate(tPump, 1);
+            iActuator.activate(tPump);
         }
     }
     

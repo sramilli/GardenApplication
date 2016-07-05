@@ -9,6 +9,7 @@ import com.sun.javafx.scene.control.skin.VirtualFlow;
 import gardenapplication.entity.Actuator;
 import gardenapplication.entity.Pump;
 import gardenapplication.helper.Helper;
+import gardenapplication.properties.GardenProperties;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +32,7 @@ public class Garden implements Runnable{
     Pump iPump4;
     Pump iPump5;
     List<Pump> iPumps;
+    SensorDataLogger iLogger;
     
     private Timer iTimer;
     
@@ -39,27 +41,26 @@ public class Garden implements Runnable{
     public Garden(){
         super();
         iActuator = new Actuator();
-        iPump1 = new Pump("/anna/balcony/pump1");
-        iPump2 = new Pump("/anna/balcony/pump2");
-        iPump3 = new Pump("/anna/balcony/pump3");
-        iPump4 = new Pump("/anna/balcony/pump4");
-        iPump5 = new Pump("/anna/balcony/pump5");
+        iPump1 = new Pump(GardenProperties.TOPIC_PUMP_1, GardenProperties.CALIBRATION_PUMP_1, GardenProperties.DEFAULT_QUANTITY_PUMP_1);
+        iPump2 = new Pump(GardenProperties.TOPIC_PUMP_2, GardenProperties.CALIBRATION_PUMP_2, GardenProperties.DEFAULT_QUANTITY_PUMP_2);
+        iPump3 = new Pump(GardenProperties.TOPIC_PUMP_3, GardenProperties.CALIBRATION_PUMP_3, GardenProperties.DEFAULT_QUANTITY_PUMP_3);
+        iPump4 = new Pump(GardenProperties.TOPIC_PUMP_4, GardenProperties.CALIBRATION_PUMP_4, GardenProperties.DEFAULT_QUANTITY_PUMP_4);
+        iPump5 = new Pump(GardenProperties.TOPIC_PUMP_5, GardenProperties.CALIBRATION_PUMP_5, GardenProperties.DEFAULT_QUANTITY_PUMP_5);
         iPumps = new ArrayList<>(Arrays.asList(iPump1, iPump2, iPump3, iPump4, iPump5));
-        /*iPumps = new ArrayList<>();
-        iPumps.add(iPump1);
-        iPumps.add(iPump2);
-        iPumps.add(iPump3);
-        iPumps.add(iPump4);
-        iPumps.add(iPump5);*/
         iTimer = new Timer(true);
-
+        iLogger = new SensorDataLogger();
     }
     
     @Override
     public void run() {
         System.out.println("Garden Application Started!");
-        //scheduleActivationAtHoursOfDay("07:00", "19:00");
-        scheduleActivationAtHoursOfDay("23:53", "23:54");
+        scheduleActivationAtHoursOfDay(GardenProperties.MORNING_WATERING_TIME, GardenProperties.EVENING_WATERING_TIME);
+        iLogger.start();
+    }
+    
+    public void stop(){
+        iLogger.stop();
+        //TODO stop Tascs
     }
     
     private void scheduleActivationAtHoursOfDay(String... hours){

@@ -17,36 +17,36 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  * @author Ste
  */
 public class Actuator {
-    int iQos;
-    String iBroker;
-    String iClientId;
     MemoryPersistence iPersistence;
     
     public Actuator(){
         super();
-        iQos = GardenProperties.MQTT_QOS;
-        iBroker = GardenProperties.MQTT_BROKER;
-        iClientId = GardenProperties.CLIENT_ID;
         iPersistence = new MemoryPersistence();
     }
     
-    public void activate(IActivable aActivable, int aMinutes){
+    public void activate(IActivable aActivable){
+        Pump tPump = (Pump)aActivable;
+        if (tPump.isPlugged() == false) return;
+        
         String topic = aActivable.getTopic();
-        String content = (new Integer(aMinutes)).toString();
+        int tDefaultQuantity = tPump.getDefaultQuantity();
+        int tCalibration = tPump.getCalibration();
+        String tActivatingTime = "" + (tDefaultQuantity + tCalibration);
+        String content = tActivatingTime;
 
         try {
-            MqttClient sampleClient = new MqttClient(iBroker, iClientId, iPersistence);
+            MqttClient mqttClient = new MqttClient(GardenProperties.MQTT_BROKER, GardenProperties.ACTUATOR_CLIENT_ID, iPersistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
-            System.out.println("Connecting to broker: "+iBroker);
-            sampleClient.connect(connOpts);
+            System.out.println("Connecting to broker: " +GardenProperties.MQTT_BROKER);
+            mqttClient.connect(connOpts);
             System.out.println("Connected");
             System.out.println("Publishing message: " +topic +"    " +content);
             MqttMessage message = new MqttMessage(content.getBytes());
-            message.setQos(iQos);
-            sampleClient.publish(topic, message);
+            message.setQos(GardenProperties.MQTT_QOS_2);
+            mqttClient.publish(topic, message);
             System.out.println("Message published");
-            sampleClient.disconnect();
+            mqttClient.disconnect();
             System.out.println("Disconnected");
             System.out.println("");
         } catch(MqttException me) {
@@ -57,7 +57,6 @@ public class Actuator {
             System.out.println("excep "+me);
             me.printStackTrace();
             System.out.println("");
-
         }
     }
 }
