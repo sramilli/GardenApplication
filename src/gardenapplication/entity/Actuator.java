@@ -15,6 +15,11 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 /**
  *
  * @author Ste
+ * http://www.eclipse.org/paho/files/javadoc/index.html
+ * http://www.hivemq.com/blog/mqtt-client-library-encyclopedia-eclipse-paho-java
+ * http://dev.solacesystems.com/get-started/mqtt-tutorials/publish-subscribe_mqtt/
+ * http://www.hivemq.com/blog/mqtt-client-library-enyclopedia-paho-android-service
+ * 
  */
 public class Actuator {
     MemoryPersistence iPersistence;

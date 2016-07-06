@@ -36,6 +36,7 @@ public class SensorDataLogger {
     public void start() {
         try{
             iMqttClient = new MqttClient(GardenProperties.MQTT_BROKER, GardenProperties.SENSOR_LOGGER_CLIENT_ID, iPersistence);
+            //set callback before connecting
             iMqttClient.setCallback(new SensorDataLoggerCallback());
             iMqttClient.connect(iConnOpt);
         } catch (MqttException e) {
@@ -54,6 +55,7 @@ public class SensorDataLogger {
     
     public void stop(){
         try {
+            //client.unsubscribe("#");
             iMqttClient.disconnect();
         } catch (MqttException ex) {
             ex.printStackTrace();

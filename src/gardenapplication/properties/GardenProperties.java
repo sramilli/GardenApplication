@@ -41,4 +41,6 @@ public class GardenProperties {
     public static boolean PUMP_4_PLUGGED = true;
     public static boolean PUMP_5_PLUGGED = true;
     
+    public static boolean PERSIST_TEMPERATURES = true;
+    
 }
